@@ -1,0 +1,42 @@
+// Time: O(m x n)
+// Space: O(n)
+/*
+1. Check the word length and order length first
+2. In line 28, forgot the decode the letter to index
+3. In line 34, forgot to write the "break", since if a former letter is smaller, don't have to compare the sequentials any longer
+*/
+
+class Solution {
+public:
+    bool isAlienSorted(vector<string>& words, string order) {
+        if(words.size() <= 1 || words.empty() || order.length() != 26) return true;
+        std::vector<int> map;
+        map.resize(26, 0);
+
+        for(int i = 0; i < order.length(); i++) {
+            map[order[i] - 'a'] = i;
+        }
+
+        for(int i = 0; i < words.size() - 1; i++) {
+            string word1 = words[i];
+            string word2 = words[i + 1];
+
+            for(int j = 0; j < word1.length(); j++) {
+                if(j == word2.length()) return false; // the next is shorter
+                // the first differing occurs
+
+                if(word1[j] != word2[j]) {
+                    if (map[word1[j] - 'a'] > map[word2[j] - 'a']) {
+                        return false;
+                    }
+                    // if the first char differ, and it satisfied the condition, 
+                    // then they are sorted, don't have to look the following letters
+                    break; 
+                    // else (map[word1[j]] <= map[word2[j]])
+                }
+            }
+            // if we come out of the loop w/out returning false
+        }
+        return true;
+    }
+};
